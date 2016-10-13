@@ -1,0 +1,171 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "definitions": {
+        "ExtractRequest": {
+            "properties": {
+                "text": {
+                    "description": "Optional text to be tokenized by default MITIE tokenizer",
+                    "type": "string"
+                },
+                "tokens": {
+                    "description": "List of tokens to extract named entities from",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "ExtractResponse": {
+            "properties": {
+                "entities": {
+                    "items": {
+                        "$ref": "#/definitions/ExtractedEntry"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "tokens": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "ExtractedEntry": {
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "score": {
+                    "format": "double",
+                    "type": "number"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "InfoResponse": {
+            "properties": {
+                "tags": {
+                    "description": "NER tags suppored by this instance of extractor",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "Text": {
+            "type": "string"
+        }
+    },
+    "info": {
+        "contact": {
+            "email": "mike@chaliy.name",
+            "name": "API Support"
+        },
+        "description": "Named entity extractor APIs for UK language with MITIE under the hood and model trained by Lang-UK",
+        "title": "Lang-UK NER",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/ner": {
+            "get": {
+                "operationId": "info",
+                "responses": {
+                    "200": {
+                        "description": "The request has succeeded",
+                        "schema": {
+                            "$ref": "#/definitions/InfoResponse"
+                        }
+                    }
+                },
+                "summary": "Information about current NER",
+                "tags": [
+                    "ner"
+                ]
+            },
+            "post": {
+                "operationId": "extract",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ExtractRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The request has succeeded",
+                        "schema": {
+                            "$ref": "#/definitions/ExtractResponse"
+                        }
+                    }
+                },
+                "summary": "Extract named entities from tokenized input",
+                "tags": [
+                    "ner"
+                ]
+            }
+        },
+        "/ner/text": {
+            "post": {
+                "consumes": [
+                    "plain/text"
+                ],
+                "operationId": "extract_fom_text",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The request has succeeded",
+                        "schema": {
+                            "$ref": "#/definitions/ExtractResponse"
+                        }
+                    }
+                },
+                "summary": "Extract named entities from text input with default MITIE tokenizer",
+                "tags": [
+                    "ner"
+                ]
+            }
+        }
+    },
+    "produces": [
+        "application/json"
+    ],
+    "responses": {
+        "400": {
+            "description": "Input is malformed or invalid"
+        },
+        "405": {
+            "description": "Method is not allowed"
+        },
+        "500": {
+            "description": "Internal error"
+        }
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0"
+}

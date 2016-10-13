@@ -1,0 +1,3 @@
+microservices:
+  - https://raw.githubusercontent.com/chaliy/ner-ms/master/src/swagger.yaml
+  - http://wild.lisp.kiev.ua/swagger

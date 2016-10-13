@@ -1,0 +1,216 @@
+{
+    "basePath": "/languagetool",
+    "definitions": {
+        "LemmatizeResponse": {
+            "properties": {
+                "lemmatizedSentences": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "notes": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "TagResponse": {
+            "properties": {
+                "notes": {
+                    "type": "string"
+                },
+                "taggedText": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "TokenizeResponse": {
+            "properties": {
+                "notes": {
+                    "type": "string"
+                },
+                "tokens": {
+                    "items": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "host": "nlp.net.ua:8787",
+    "info": {
+        "contact": {
+            "email": "arysin@gmail.com",
+            "name": "Andriy Rysin",
+            "url": "https://github.com/brown-uk/nlp_uk"
+        },
+        "description": "This is a project to provide NLP services for Ukrainian language based on LanguageTool",
+        "title": "Simple NLP services for Ukrainian",
+        "version": "1.0"
+    },
+    "paths": {
+        "/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "operationId": "saveUsingPOST_39",
+                "parameters": [
+                    {
+                        "description": "Body text; e.g<br>{\"text\": \"Сьогодні у продажі. 12-те зібрання творів 1969 р. І. П. Котляревського.\"}",
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/TokenizeResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid body provided"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "summary": "Tokenizes the text into sentences and then into words",
+                "tags": [
+                    "tokenize-controller"
+                ]
+            }
+        },
+        "/lemmatize/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "operationId": "saveUsingPOST_7",
+                "parameters": [
+                    {
+                        "description": "Body text; e.g<br>{\"text\": \"Сьогодні у продажі. 12-те зібрання творів 1969 р. І. П. Котляревського.\"}",
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/LemmatizeResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid body provided"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "summary": "Lemmatizes the text",
+                "tags": [
+                    "lemmatize-controller"
+                ]
+            }
+        },
+        "/tag/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "operationId": "saveUsingPOST_31",
+                "parameters": [
+                    {
+                        "description": "Body text; e.g<br>{\"text\": \"Сьогодні у продажі. 12-те зібрання творів 1969 р. І. П. Котляревського.\"}",
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/TagResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid body provided"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "summary": "Tags the text",
+                "tags": [
+                    "tag-controller"
+                ]
+            }
+        }
+    },
+    "swagger": "2.0",
+    "tags": [
+        {
+            "description": "Lemmatization services for Ukrainian language",
+            "name": "lemmatize-controller"
+        },
+        {
+            "description": "Tokenization services for Ukrainian language",
+            "name": "tokenize-controller"
+        },
+        {
+            "description": "Tagging services for Ukrainian language",
+            "name": "tag-controller"
+        }
+    ]
+}

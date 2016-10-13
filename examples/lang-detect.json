@@ -1,0 +1,73 @@
+{
+    "basePath": "/",
+    "host": "wild.lisp.kiev.ua",
+    "info": {
+        "contact": {
+            "email": "vseloved@gmail.com",
+            "name": "Vsevolod Dyomkin"
+        },
+        "description": "Language identification for 156 languages",
+        "license": {
+            "name": "Apache"
+        },
+        "title": "wiki-lang-detect",
+        "version": "0.9.0"
+    },
+    "paths": {
+        "/detect": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "Text to identify language for",
+                        "in": "body",
+                        "name": "text",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 5000,
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Result of language detection",
+                        "examples": {
+                            "application/json": {
+                                "en": 1.0
+                            }
+                        },
+                        "schema": {
+                            "items": {
+                                "type": "array"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "tags": [
+                    "langid",
+                    "lang-uk"
+                ]
+            }
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "x-microservice-taxonomy": [
+        "test"
+    ]
+}
