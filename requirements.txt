@@ -5,3 +5,5 @@ cchardet==1.0.0
 aiodns==1.1.1
 PyYAML==3.12
 jsonschema==2.5.1
+aiohttp-jinja2==0.8.0
+awesome-slugify==1.6.5

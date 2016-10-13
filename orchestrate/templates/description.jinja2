@@ -1,0 +1,17 @@
+# Below are docs from microservices that are currently enabled
+
+{% for c in configs %}
+	{% set info=c.swagger_config.info %}
+	### {{ info.title }}
+	>{{ info.description|safe }}
+	>#### Version
+	>{{ info.version }}
+	>#### Contact information
+	>{{ info.contact.name }}{% if info.contact.email %}, {{ info.contact.email }}{% endif %}
+	{% if info.license %}
+	>#### License
+	>{{ info.license.name }}
+	{% endif %}
+
+{% endfor %}
+---

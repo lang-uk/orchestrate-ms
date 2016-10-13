@@ -1,3 +1,4 @@
 microservices:
-  - https://raw.githubusercontent.com/chaliy/ner-ms/master/src/swagger.yaml
+  - http://nlp.net.ua:8787/languagetool/v2/api-docs
   - http://wild.lisp.kiev.ua/swagger
+  - http://proto.63fgxzp2pg.eu-central-1.elasticbeanstalk.com/swagger.json
