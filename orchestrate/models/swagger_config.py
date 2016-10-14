@@ -71,6 +71,9 @@ class SwaggerConfig(object):
                 scheme = "https"
 
         netloc = self.swagger_config.get("host", res.netloc)
-        base_path = self.swagger_config.get("basePath", "/")
+
+        # TODO: check how that should work
+        base_path = self.swagger_config.get("basePath", "/") + "/"
+        logger.error(urlunparse([scheme, netloc, base_path, "", "", ""]))
 
         return urlunparse([scheme, netloc, base_path, "", "", ""])

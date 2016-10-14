@@ -151,7 +151,8 @@ class ServerConfig(object):
                     proxies.append({
                         "method": method,
                         "new_url": new_url,
-                        "old_url": urljoin(url, path)
+                        # TODO: check how it should work
+                        "old_url": urljoin(url, path.lstrip("/"))
                     })
 
         return proxies
