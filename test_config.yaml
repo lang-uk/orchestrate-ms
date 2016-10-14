@@ -2,3 +2,7 @@ microservices:
   - http://nlp.net.ua:8787/languagetool/v2/api-docs
   - http://wild.lisp.kiev.ua/swagger
   - http://proto.63fgxzp2pg.eu-central-1.elasticbeanstalk.com/swagger.json
+skip_swagger_validation: False
+kong_api_url: http://127.0.0.1:8001
+debug: True
+base_url: http://127.0.0.1:8080

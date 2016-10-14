@@ -6,8 +6,20 @@
             "items": {
                 "type": "string"
             }
+        },
+        "skip_swagger_validation": {
+            "type": "boolean"
+        },
+        "debug": {
+            "type": "boolean"
+        },
+        "kong_api_url": {
+            "type": "string"
+        },
+        "base_url": {
+            "type": "string"
         }
     },
-    "required": ["microservices"],
+    "required": ["microservices", "kong_api_url", "base_url"],
     "additionalProperties": false
 }

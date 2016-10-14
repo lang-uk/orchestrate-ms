@@ -69,9 +69,12 @@
     "info": {
         "contact": {
             "email": "mike@chaliy.name",
-            "name": "API Support"
+            "name": "Mike Chaliy"
         },
         "description": "Named entity extractor APIs for UK language with MITIE under the hood and model trained by Lang-UK",
+        "license": {
+            "name": "MIT"
+        },
         "title": "Lang-UK NER",
         "version": "1.0.0"
     },
@@ -115,37 +118,10 @@
                 "summary": "Extract named entities from tokenized input",
                 "tags": [
                     "ner"
-                ]
-            }
-        },
-        "/ner/text": {
-            "post": {
-                "consumes": [
-                    "plain/text"
                 ],
-                "operationId": "extract_fom_text",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Text"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The request has succeeded",
-                        "schema": {
-                            "$ref": "#/definitions/ExtractResponse"
-                        }
-                    }
-                },
-                "summary": "Extract named entities from text input with default MITIE tokenizer",
-                "tags": [
-                    "ner"
-                ]
+                "x-taskAlgo": "mitie",
+                "x-taskClass": "ner",
+                "x-taskModel": "uk"
             }
         }
     },
@@ -164,8 +140,7 @@
         }
     },
     "schemes": [
-        "http",
-        "https"
+        "http"
     ],
     "swagger": "2.0"
 }

@@ -1,6 +1,7 @@
 import os.path
 import logging
 from aiodns.error import DNSError
+import jsonschema.exceptions
 from urllib.parse import urlparse, urlunparse
 from .exc import IncompatibleSwaggerException
 from .tools import deserialize_me, validate_me
@@ -17,7 +18,7 @@ class SwaggerConfig(object):
         self.validator_file = os.path.join(
             os.path.dirname(__file__), "schemas/validate_swagger.json")
 
-    async def load(self):
+    async def load(self, skip_validation=False):
         try:
             async with self.session.get(self.url) as resp:
                 self.loaded = True
@@ -33,12 +34,20 @@ class SwaggerConfig(object):
                     logger.warning(
                         "Cannot parse swagger file from {}".format(self.url))
 
-                if validate_me(obj, self.validator_file) is None:
+                try:
+                    validate_me(obj, self.validator_file)
                     self.is_ok = True
                     self.swagger_config = obj
-                else:
+                except jsonschema.exceptions.ValidationError:
                     logger.warning(
-                        "Cannot parse swagger file from {}".format(self.url))
+                        "Cannot validate swagger file from {}".format(self.url))
+
+                    if skip_validation:
+                        logger.warning(
+                            "Adding swagger file from {} anyway".format(self.url))
+                        self.is_ok = True
+                        self.swagger_config = obj
+
         except (DNSError, ValueError) as e:
             logger.warning(
                 "Cannot resolve url for swagger file from {}\n{}".format(

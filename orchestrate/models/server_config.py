@@ -6,7 +6,9 @@ import aiohttp_jinja2
 from collections import defaultdict
 from copy import deepcopy
 from slugify import slugify
+from urllib.parse import urljoin
 
+import jsonschema.exceptions
 from .swagger_config import SwaggerConfig
 from .tools import deserialize_me, validate_me
 from .exc import ConfigReaderException
@@ -29,7 +31,9 @@ class ServerConfig(object):
         config_validator_file = os.path.join(
             os.path.dirname(__file__), "schemas/validate_server_config.json")
 
-        if validate_me(self.config, config_validator_file) is not None:
+        try:
+            validate_me(self.config, config_validator_file)
+        except jsonschema.exceptions.ValidationError:
             raise ConfigReaderException("Cannot validate config")
 
         self.ms_configs = []
@@ -39,7 +43,8 @@ class ServerConfig(object):
                 SwaggerConfig(config_url, session)
                 for config_url in self.config["microservices"]]
 
-            tasks = [asyncio.ensure_future(ms_config.load())
+            tasks = [asyncio.ensure_future(ms_config.load(
+                     self.config.get("skip_swagger_validation", False)))
                      for ms_config in self.ms_configs]
 
             loop.run_until_complete(asyncio.gather(*tasks))
@@ -106,3 +111,47 @@ class ServerConfig(object):
         global_config["paths"] = paths
         global_config["definitions"] = definitions
         return global_config
+
+    def generate_proxy_config(self):
+        proxies = []
+        paths = defaultdict(lambda: defaultdict(dict))
+
+        for config in self.good_configs():
+            url = config.base_url
+
+            for path, path_config in config.swagger_config.get("paths", {}).items():
+                for method, method_config in path_config.items():
+                    if ("x-taskClass" not in method_config or
+                            "x-taskAlgo" not in method_config):
+                        logger.warning(
+                            "Method {} of endpoint {} of microservice {} doesn't have x-Tags, skipping it".format(
+                                method, path, url
+                            )
+                        )
+                        continue
+
+                    task_class = method_config["x-taskClass"]
+                    task_algo = method_config["x-taskAlgo"]
+                    # TODO: unique instead of default?
+                    # How to syncronize with them with generate_global_config then?
+                    task_model = method_config.get("x-taskModel", "default")
+                    new_url = "/{}/{}/{}".format(
+                        slugify(task_class),
+                        slugify(task_algo),
+                        slugify(task_model)
+                    )
+
+                    if new_url in paths and method in paths[new_url]:
+                        continue
+
+                    # TODO: That shit screams: refactor me!
+                    # We need an iterator which then can be used by both methods
+                    # generate_global_config and generate_proxy_config
+                    paths[new_url][method] = method_config
+                    proxies.append({
+                        "method": method,
+                        "new_url": new_url,
+                        "old_url": urljoin(url, path)
+                    })
+
+        return proxies
